@@ -34,11 +34,22 @@ public class InsertInterval {
     public static int[][] insert(int[][] intervals, int[] newInterval) {
         Stack<Interval> stack = new Stack<Interval>();
         Interval new_int = new Interval(newInterval);
-        stack.push(new Interval(intervals[0]));
+        stack.push(new_int);
 
-        for (int i=1; i<intervals.length; i++) {
+        for (int i=0; i<intervals.length; i++) {
             Interval curr = new Interval(intervals[i]);
-            System.out.println("DEBUG: curr - " + curr.toString());
+            Interval prevInt = stack.peek();
+            System.out.println("DEBUG: curr - " + curr.toString() + ", prevInt - " + prevInt.toString());
+            if (curr.isOverlapping(prevInt)) {
+                Interval merged = curr.merge(prevInt);
+                System.out.println("DEBUG: Is overlapping, merged - " + merged);
+                stack.pop();
+                stack.push(merged);
+            } else {
+                stack.push(curr);
+            }
+
+            /*System.out.println("DEBUG: curr - " + curr.toString());
             if (curr.isOverlapping(new_int)) {
                 System.out.println("DEBUG: Is overlapping with new_int");
                 Interval merged = curr.merge(new_int);
@@ -56,7 +67,7 @@ public class InsertInterval {
                 } else stack.push(merged);
             } else {
                 stack.push(curr);
-            }
+            }*/
             System.out.println("DEBUG: stack - " + stack);
             System.out.println();
         }

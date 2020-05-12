@@ -1,4 +1,4 @@
-package CCI.TreesNGraphs;
+package trees;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,11 @@ public class TreeNaryNode {
     public TreeNaryNode(int data, int numOfLeaves){
         this.data = data;
         this.numOfLeaves = numOfLeaves;
+        leaves = new ArrayList<TreeNaryNode>();
+    }
+
+    public TreeNaryNode(int data) {
+        this.data = data;
         leaves = new ArrayList<TreeNaryNode>();
     }
 

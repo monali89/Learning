@@ -1,14 +1,31 @@
 package graphs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author Monali L on 4/18/2020
  */
 
 public class DfsApplications {
+
+    // Depth First Search
+    public List<Integer> dfs(int root, Digraph dg) {
+        boolean[] isVisited = new boolean[dg.size()];
+        List<Integer> dfsOrder = new ArrayList<Integer>();
+        dfs_helper(root, dg, isVisited, dfsOrder);
+        return dfsOrder;
+    }
+
+    public void dfs_helper(int n, Digraph dg, boolean[] isVisited, List<Integer> dfsOrder) {
+        dfsOrder.add(n);
+        isVisited[n] = true;
+        for(int adj: dg.getAdjEdges(n)) {
+            if(!isVisited[adj]) {
+                isVisited[adj] = true;
+                dfs_helper(adj, dg, isVisited, dfsOrder);
+            }
+        }
+    }
 
     // Given 2D matrix find number of islands (connected 1's)
     public int getNumberOfIslands(int[][] m) {
@@ -161,4 +178,94 @@ public class DfsApplications {
         }
         stack.push(v);
     }
+
+    // Dijkstra Algorithm - given a source vertex find shortest path to all other vertices form here
+    // Can be bfs/dfs
+    // Directed non negative edges
+    public void djk(int s, WeightedDigraph wdg) {
+        int[] distTo = new int[wdg.size()];
+        int[] edgeTo = new int[wdg.size()];
+        boolean[] isVisited = new boolean[wdg.size()];
+        Queue<Integer> queue = new PriorityQueue<Integer>();
+
+        queue.add(s);
+        for (int i = 0; i < wdg.size(); i++) distTo[i] = Integer.MAX_VALUE;
+        distTo[s] = 0;
+        for (int i = 0; i < wdg.size(); i++) edgeTo[i] = -1;
+
+        while (!queue.isEmpty()) {
+            int curr = queue.remove();
+            isVisited[curr] = true;
+            for (int adj: wdg.getAdjEdges(curr)) {
+                int thisDist = distTo[curr] + wdg.getEdgeWeight(curr, adj);
+                if (distTo[adj] > thisDist) {
+                    queue.add(adj);
+                    isVisited[adj] = true;
+                    distTo[adj] = thisDist;
+                    edgeTo[adj] = curr;
+                }
+            }
+        }
+
+        System.out.print("Vertex: ");
+        for (int i = 0; i < wdg.size(); i++) System.out.print(i + " ");
+        System.out.println();
+
+        System.out.print("DistTo: ");
+        for (int i = 0; i < wdg.size(); i++) System.out.print(distTo[i] + " ");
+        System.out.println();
+
+        System.out.print("EdgeTo: ");
+        for (int i = 0; i < wdg.size(); i++) System.out.print(edgeTo[i] + " ");
+        System.out.println();
+    }
+
+    // TODO: Bellman Ford Algorithm
+    // Single source shortest path in a graph with negative edges
+
+    // Floyd Warshall Algorithm
+    // Finding shortest paths in a weighted graph with positive and negative edges (no negative cycles)
+    // Performance: V^2, V^3
+    public void floydWarshall(WeightedDigraph wdg) {
+        // Create a matrix of vxv size
+        int[][] distTo = new int[wdg.size()][wdg.size()];
+        // Initialize all weights as infinity
+        // Initialize matrix with 0 for self weight and actual weight for other edges
+        for (int i = 0; i < wdg.size(); i++) {
+            for (int j = 0; j < wdg.size(); j++) {
+                //distTo[i][j] = Integer.MAX_VALUE;
+                if (i == j) distTo[i][j] = 0;
+                else distTo[i][j] = wdg.getEdgeWeight(i, j);
+            }
+        }
+        // Loop through the graph thrice and compare weights
+        for (int k = 0; k < wdg.size(); k++) {
+            for (int i = 0; i < wdg.size(); i++) {
+                for (int j = 0; j < wdg.size(); j++) {
+                    if (distTo[i][j] > distTo[i][k] + distTo[k][j]) {
+                        distTo[i][j] = distTo[i][k] + distTo[k][j];
+                    }
+                }
+        }
+        }
+        for (int i = 0; i < distTo.length; i++) {
+            for (int j = 0; j < distTo.length; j++) {
+                System.out.print(distTo[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // TODO: Detect Cycle in an Undirected Graph OR Union find algorithm
+
+    // TODO: Minimum Spanning tree **Prim**
+
+    // TODO: Minimum Spanning tree **Kruskal**
+
+    // TODO: Topological Sort
+
+    // TODO: Boggle (Find all possible words in a board of characters)
+
+    // TODO: Bridges in a Graph
+
 }

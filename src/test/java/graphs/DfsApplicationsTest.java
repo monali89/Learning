@@ -21,6 +21,23 @@ public class DfsApplicationsTest {
     }
 
     @Test
+    public void test_dfs() {
+        Digraph dg = new Digraph(4);
+        dg.addEdge(0, 1);
+        dg.addEdge(0, 2);
+        dg.addEdge(1, 2);
+        dg.addEdge(2, 0);
+        dg.addEdge(2, 3);
+        dg.addEdge(3, 3);
+        List<Integer> expected = new ArrayList<Integer>();
+        expected.add(2);
+        expected.add(0);
+        expected.add(1);
+        expected.add(3);
+        Assert.assertEquals(expected, dfsApplications.dfs(2, dg));
+    }
+
+    @Test
     public void test_getNumberOfIslands_01() {
         int[][] mat = {{1, 1, 0, 0, 0},
                 {0, 1, 0, 0, 1},
@@ -64,5 +81,34 @@ public class DfsApplicationsTest {
         wdg.addEdge(5, 3, 6);
         wdg.addEdge(5, 4, 5);
         Assert.assertEquals(12, dfsApplications.longestPath(wdg));
+    }
+
+
+    @Test
+    public void test_dijkstra() {
+        WeightedDigraph wdg = new WeightedDigraph(6);
+        wdg.addEdge(0, 1, 2);
+        wdg.addEdge(0, 2, 4);
+        wdg.addEdge(1, 2, 1);
+        wdg.addEdge(1, 3, 4);
+        wdg.addEdge(1, 4, 2);
+        wdg.addEdge(2, 4, 3);
+        wdg.addEdge(3, 5, 2);
+        wdg.addEdge(4, 3, 3);
+        wdg.addEdge(4, 5, 2);
+
+        dfsApplications.djk(0, wdg);
+
+    }
+
+    @Test
+    public void test_floydWarshall() {
+        WeightedDigraph wdg = new WeightedDigraph(6);
+        wdg.addEdge(0, 1, 3);
+        wdg.addEdge(1, 2, 4);
+        wdg.addEdge(1, 5, 2);
+        wdg.addEdge(5, 3, 6);
+        wdg.addEdge(5, 4, 5);
+        dfsApplications.floydWarshall(wdg);
     }
 }

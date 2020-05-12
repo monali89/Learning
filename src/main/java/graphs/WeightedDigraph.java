@@ -15,6 +15,11 @@ public class WeightedDigraph {
 
     WeightedDigraph(int vertices){
         adjacencyMatrix = new int[vertices][vertices];
+        for (int i = 0; i < adjacencyMatrix.length; i++) {
+            for (int j = 0; j < adjacencyMatrix.length; j++) {
+                adjacencyMatrix[i][j] = i == j ? 0 : Integer.MAX_VALUE;
+            }
+        }
         vertexList = new ArrayList<Integer>();
         for (int i = 0; i < vertices; i++) {
             vertexList.add(i);

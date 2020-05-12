@@ -1,4 +1,4 @@
-package CCI.TreesNGraphs;
+package trees;
 
 /**
  * Date: 6/3/2019

@@ -1,7 +1,7 @@
 package LeetCode;
 
-import CCI.TreesNGraphs.BinaryTree;
-import CCI.TreesNGraphs.TreeNode;
+import trees.BinaryTree;
+import trees.TreeNode;
 import org.junit.Assert;
 import org.junit.Test;
 

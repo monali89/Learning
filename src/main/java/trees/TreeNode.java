@@ -1,4 +1,4 @@
-package CCI.TreesNGraphs;
+package trees;
 
 public class TreeNode {
 

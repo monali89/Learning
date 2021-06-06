@@ -11,21 +11,49 @@ import java.util.List;
  */
 public class NumberofPathswithMaxScore_1301 {
 
-    private int pathCount;
-    private int[][] pathSum;
-    private int n;
-    private boolean[][] isVisited;
-
 
     public int[] pathsWithMaxScore(List<String> board) {
 
-        n = board.size();
-        pathCount = 0;
-        pathSum = new int[n][n];
-        isVisited = new boolean[n][n];
+        int n = board.size();
+        int pathCount = 0;
+        int[][] pathSum = new int[n][n];
+        int[][] neigh = {
+                {-1, 0},
+                {0, -1},
+                {-1, -1}
+        };
 
         pathSum[n-1][n-1] = 0;
-        dfs(n-1, n-1, board, 0);
+
+        for (int r = n-1; r >= 0; r--) {
+            for (int c = n-1; c >= 0; c--) {
+                if (r == 0 && c == 0 || board.get(r).charAt(c) == 'X') continue;
+                int prev = pathSum[r][c];
+                for (int i = 0; i < 3; i++) {
+
+                    int nr = r + neigh[i][0];
+                    int nc = c + neigh[i][1];
+                    if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
+                    char ch = board.get(nr).charAt(nc);
+
+                    if (ch == 'E') {
+                        if (pathSum[nr][nc] == 0 && prev != -1) {
+                            pathSum[nr][nc] = prev;
+                            pathCount++;
+                        } else if (pathSum[nr][nc] < prev) {
+                            pathSum[nr][nc] = prev;
+                        } else if (pathSum[nr][nc] == prev) {
+                            pathCount++;
+                        }
+                    } else if (ch == 'X' || prev < 0) {
+                        pathSum[nr][nc] = Integer.MIN_VALUE;
+                    } else if ((prev + Character.getNumericValue(ch)) > pathSum[nr][nc]) {
+                            pathSum[nr][nc] = prev + Character.getNumericValue(ch);
+                    }
+                }
+            }
+        }
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 System.out.print(pathSum[i][j] + " ");
@@ -33,52 +61,34 @@ public class NumberofPathswithMaxScore_1301 {
             System.out.println();
         }
 
-        return new int[] {pathSum[0][0], pathCount};
-    }
-
-    public int dfs(int r, int c, List<String> board, int count) {
-        if (r < 0 || r >= n || c < 0 || c>= n) return 0;
-
-        else if (board.get(r).charAt(c) == 'E') {
-            pathSum[r][c] = count;
-            pathCount++;
-            return pathSum[r][c];
-
-        } else if(pathSum[r][c] != 0) {
-            return pathSum[r][c];
-
-        } else {
-
-            isVisited[r][c] = true;
-
-            int[] idx1 = {-1, 0, -1};
-            int[] idx2 = {0, -1, -1};
-            int maxVal = Integer.MIN_VALUE;
-
-            for (int i=0; i<3; i++) {
-
-                int nr = r + idx1[i];
-                int nc = c + idx2[i];
-
-                if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
-                if (!isVisited[nr][nc] && board.get(nr).charAt(nc) != 'X') {
-                    maxVal = Math.max(maxVal, dfs(r+idx1[i], c+idx2[i], board,
-                            count + Character.getNumericValue(board.get(nr).charAt(nc))));
-                    isVisited[r+idx1[i]][c+idx2[i]] = false;
-                }
-            }
-            pathSum[r][c] = Character.getNumericValue(board.get(r).charAt(c)) + maxVal;
-            return pathSum[r][c];
-        }
-
+        return new int[] {pathSum[0][0], pathCount % 10000007};
     }
 
     public static void main(String[] args) {
         NumberofPathswithMaxScore_1301 object = new NumberofPathswithMaxScore_1301();
-        List<String> input = Arrays.asList("E12","1X1","21S");
-        // Arrays.asList("E23", "2X2", "12S");
-        int[] output = object.pathsWithMaxScore(input);
+
+        List<String> input;
+        int[] output;
+
+        input = Arrays.asList("E12","1X1","21S");
+        output = object.pathsWithMaxScore(input);
+        System.out.println("Input: " + input);
         System.out.println("Maximum sum: " + output[0]);
         System.out.println("Total Paths: " + output[1]);
+        System.out.println();
+
+        input = Arrays.asList("E23", "2X2", "12S");
+        output = object.pathsWithMaxScore(input);
+        System.out.println("Input: " + input);
+        System.out.println("Maximum sum: " + output[0]);
+        System.out.println("Total Paths: " + output[1]);
+        System.out.println();
+
+        input = Arrays.asList("E11","XXX","11S");
+        output = object.pathsWithMaxScore(input);
+        System.out.println("Input: " + input);
+        System.out.println("Maximum sum: " + output[0]);
+        System.out.println("Total Paths: " + output[1]);
+        System.out.println();
     }
 }

@@ -15,8 +15,8 @@ public class NumberofPathswithMaxScore_1301 {
     public int[] pathsWithMaxScore(List<String> board) {
 
         int n = board.size();
-        int pathCount = 0;
         int[][] pathSum = new int[n][n];
+        int[][] pathCount = new int[n][n];
         int[][] neigh = {
                 {-1, 0},
                 {0, -1},
@@ -24,10 +24,11 @@ public class NumberofPathswithMaxScore_1301 {
         };
 
         pathSum[n-1][n-1] = 0;
+        pathCount[n-1][n-1] = 1;
 
         for (int r = n-1; r >= 0; r--) {
             for (int c = n-1; c >= 0; c--) {
-                if (r == 0 && c == 0 || board.get(r).charAt(c) == 'X') continue;
+                if (r == 0 && c == 0 || board.get(r).charAt(c) == 'X' || pathCount[r][c] == 0) continue;
                 int prev = pathSum[r][c];
                 for (int i = 0; i < 3; i++) {
 
@@ -36,18 +37,13 @@ public class NumberofPathswithMaxScore_1301 {
                     if (nr < 0 || nr >= n || nc < 0 || nc >= n) continue;
                     char ch = board.get(nr).charAt(nc);
 
-                    if (ch == 'E') {
-                        if (pathSum[nr][nc] == 0) {
-                            pathSum[nr][nc] = prev;
-                            pathCount++;
-                        } else if (pathSum[nr][nc] < prev) {
-                            pathSum[nr][nc] = prev;
-                        } else if (pathSum[nr][nc] == prev) {
-                            pathCount++;
-                        }
-                    } else if (ch != 'X') {
-                        if ((prev + Character.getNumericValue(ch)) > pathSum[nr][nc]) {
-                            pathSum[nr][nc] = prev + Character.getNumericValue(ch);
+                    if (ch != 'X') {
+                        int total = (ch == 'E') ? prev : prev + Character.getNumericValue(ch);
+                        if (total > pathSum[nr][nc]) {
+                            pathSum[nr][nc] = total;
+                            pathCount[nr][nc] = pathCount[r][c];
+                        } else if (total == pathSum[nr][nc]) {
+                            pathCount[nr][nc] = pathCount[r][c] + pathCount[nr][nc];
                         }
                     }
                 }
@@ -61,7 +57,7 @@ public class NumberofPathswithMaxScore_1301 {
             System.out.println();
         }
 
-        return new int[] {pathSum[0][0], pathCount % 10000007};
+        return new int[] {pathSum[0][0], pathCount[0][0]};
     }
 
     public static void main(String[] args) {

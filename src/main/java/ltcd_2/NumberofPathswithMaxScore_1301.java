@@ -37,7 +37,7 @@ public class NumberofPathswithMaxScore_1301 {
                     char ch = board.get(nr).charAt(nc);
 
                     if (ch == 'E') {
-                        if (pathSum[nr][nc] == 0 && prev != -1) {
+                        if (pathSum[nr][nc] == 0) {
                             pathSum[nr][nc] = prev;
                             pathCount++;
                         } else if (pathSum[nr][nc] < prev) {
@@ -45,10 +45,10 @@ public class NumberofPathswithMaxScore_1301 {
                         } else if (pathSum[nr][nc] == prev) {
                             pathCount++;
                         }
-                    } else if (ch == 'X' || prev < 0) {
-                        pathSum[nr][nc] = Integer.MIN_VALUE;
-                    } else if ((prev + Character.getNumericValue(ch)) > pathSum[nr][nc]) {
+                    } else if (ch != 'X') {
+                        if ((prev + Character.getNumericValue(ch)) > pathSum[nr][nc]) {
                             pathSum[nr][nc] = prev + Character.getNumericValue(ch);
+                        }
                     }
                 }
             }

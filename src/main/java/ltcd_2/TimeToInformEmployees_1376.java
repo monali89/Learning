@@ -15,30 +15,40 @@ public class TimeToInformEmployees_1376 {
 
         int totalTime = 0;
 
-        Queue<Integer> mangs = new ArrayDeque<Integer>();
-        Queue<Integer> subs = new ArrayDeque<Integer>();
+        // create a list of list
+        List<List<Integer>> ll = new ArrayList<List<Integer>>();
 
-        mangs.add(headID);
+        while (true) {
+            List<Integer> mangs = new ArrayList<Integer>();
+            List<Integer> subs = new ArrayList<Integer>();
 
-        while (!mangs.isEmpty()) {
-            int currMax = Integer.MIN_VALUE;
-            System.out.println("Managers: " + mangs);
-            for (int i = 0; i < manager.length; i++) {
-                if (mangs.contains(manager[i])) {
-                    if (informTime[i] != 0) subs.add(i);
+            if (ll.size() == 0) {
+                mangs.add(headID);
+                ll.add(mangs);
+            } else {
+                mangs = ll.get(ll.size()-1);
+                for (int i = 0; i < manager.length; i++) {
+                    if (mangs.contains(manager[i])) {
+                        if (informTime[i] != 0) subs.add(i);
+                    }
                 }
+                if (subs.size() == 0) break;
+                ll.add(subs);
             }
-            System.out.println("Subordinates: " + subs);
+        }
+        System.out.println(ll);
 
-            while (!mangs.isEmpty()) currMax = Math.max(currMax, informTime[mangs.remove()]);
-            System.out.print("currMax: " + currMax + " | ");
-            totalTime = totalTime + currMax;
-            System.out.println("totalTime: " + totalTime);
-            System.out.println();
-
-            while (!subs.isEmpty()) mangs.add(subs.remove());
+        int prevMax = 0;
+        while (ll.size() > 0) {
+            int currMax = 0;
+            for (int node: ll.get(ll.size()-1)) {
+                currMax = Math.max(currMax, informTime[node]);
+            }
+            prevMax = prevMax + currMax;
+            ll.remove(ll.size()-1);
         }
 
+        totalTime = prevMax;
         return totalTime;
     }
 

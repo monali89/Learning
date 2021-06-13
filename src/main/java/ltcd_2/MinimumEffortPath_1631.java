@@ -2,37 +2,25 @@ package ltcd_2;
 
 public class MinimumEffortPath_1631 {
 
-    private int minEffort;
+    private int[][] h;
+    private int[][] memo;
 
     public int minimumEffortPath(int[][] heights) {
 
-        minEffort = Integer.MAX_VALUE;
-        
-        dfs(heights, new boolean[heights.length][heights[0].length], 0, 0, 0);
+        int minEffort = 0;
+        this.h = heights;
+        this.memo = new int[h.length][h[0].length];
+        memo[0][0] = 0;
+        dfs(0, 0, new boolean[h.length][h[0].length], 0);
 
         return minEffort;
     }
 
-    public void dfs(int[][] heights, boolean[][] isVisited, int r, int c, int currEffort) {
-
-        if (r == heights.length-1 && c == heights[0].length-1) {
-            minEffort = Math.min(currEffort, minEffort);
-            return;
-        }
-
-        isVisited[r][c] = true;
-
-        int[] i = {-1, 1, 0, 0};
-        int[] j = {0, 0, -1, 1};
-
-        for (int k = 0; k < 4; k++) {
-            if (r+i[k] > -1 && r+i[k] < heights.length && c+j[k] > -1 && c+j[k] < heights[0].length) {
-                if (isVisited[r + i[k]][c + j[k]]) continue;
-                dfs(heights, isVisited, r + i[k], c + j[k], Math.abs(heights[r + i[k]][c + j[k]] - heights[r][c]));
-                isVisited[r + i[k]][c + j[k]] = false;
-            }
-        }
+    private void dfs(int i, int j, boolean[][] isVisited, int prev) {
+        memo[i][j] = Math.min(memo[i][j], Math.abs(prev - memo[i][j]));
     }
+
+
 
     public static void main(String[] args) {
 

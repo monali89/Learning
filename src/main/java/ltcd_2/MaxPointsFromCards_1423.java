@@ -13,17 +13,18 @@ public class MaxPointsFromCards_1423 {
 
         int minScore = Integer.MAX_VALUE;
         int w = cardPoints.length - k;
+        int currSum = 0;
 
-        for (int i=0; i < cardPoints.length - w; i++) {
+        for (int i=0; i < cardPoints.length - w + 1; i++) {
             int j = i + w;
-            int currSum = 0;
+
 
             if (minScore == Integer.MAX_VALUE) {
                 for (int x=i; x < j; x++) {
                     currSum = currSum  + cardPoints[x];
                 }
             } else {
-                currSum = minScore - cardPoints[i-1] + cardPoints[j-1];
+                currSum = currSum - cardPoints[i-1] + cardPoints[j-1];
             }
             minScore = Math.min(minScore, currSum);
         }
@@ -54,6 +55,14 @@ public class MaxPointsFromCards_1423 {
         cardPoints = new int[] {1,79,80,1,1,1,200,1};
         k = 3;
         System.out.println("Expected: 202, " + object.maxScore(cardPoints, k));
+
+        cardPoints = new int[] {11,49,100,20,86,29,72};
+        k = 4;
+        System.out.println("Expected: 232, " + object.maxScore(cardPoints, k));
+
+        cardPoints = new int[] {96,90,41,82,39,74,64,50,30};
+        k = 8;
+        System.out.println("Expected: 536, " + object.maxScore(cardPoints, k));
     }
 
 }

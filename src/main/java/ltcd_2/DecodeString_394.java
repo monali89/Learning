@@ -5,17 +5,27 @@ import java.util.Stack;
 public class DecodeString_394 {
 
     public String decodeString(String s) {
+
         Stack<Integer> countStack = new Stack<Integer>();
         Stack<String> stringStack = new Stack<String>();
         countStack.push(0);
         stringStack.push("");
 
-        for (char c: s.toCharArray()) {
+        int ctr = 0;
 
-            if (c >= '0' && c <= '9') {
-                int currCount = countStack.pop();
-                currCount = currCount*10 + Character.getNumericValue(c);
-                countStack.push(currCount);
+        while (ctr < s.length()) {
+
+            char c = s.charAt(ctr);
+
+            if (Character.isDigit(c)) {
+                int count = 0;
+                while (Character.isDigit(c)) {
+                    count = count*10 + Character.getNumericValue(c);
+                    ctr++;
+                    c = s.charAt(ctr);
+                }
+                countStack.push(count);
+                ctr--;
 
             } else if (c == '[') {
                 stringStack.push("");
@@ -25,15 +35,15 @@ public class DecodeString_394 {
                 currStr = currStr.concat(String.valueOf(c));
                 stringStack.push(currStr);
 
-            } else if (c == ']'){
+            } else if (c == ']') {
                 String currStr = stringStack.pop();
                 StringBuilder repeated = new StringBuilder();
                 int currCount = countStack.pop();
-                for (int i=0; i < currCount; i++)
+                for (int i = 0; i < currCount; i++)
                     repeated.append(currStr);
                 stringStack.push(repeated.toString());
-                countStack.push(0);
             }
+            ctr++;
         }
 
         StringBuilder result = new StringBuilder();
@@ -49,11 +59,11 @@ public class DecodeString_394 {
         String expected = "";
 
         // example 1
-        input = "3[a]2[bc]";
+        /*input = "3[a]2[bc]";
         output = object.decodeString(input);
         expected = "aaabcbc";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
-                " | Equal: " + (output.equals(expected)));
+                " | Equal: " + (output.equals(expected)));*/
 
         // example 2
         input = "3[a2[c]]";
@@ -63,7 +73,7 @@ public class DecodeString_394 {
                 " | Equal: " + (output.equals(expected)));
 
         // example 3
-        input = "2[abc]3[cd]ef";
+        /*input = "2[abc]3[cd]ef";
         output = object.decodeString(input);
         expected = "abcabccdcdcdef";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
@@ -74,7 +84,7 @@ public class DecodeString_394 {
         output = object.decodeString(input);
         expected = "abccdcdcdxyz";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
-                " | Equal: " + (output.equals(expected)));
+                " | Equal: " + (output.equals(expected)));*/
     }
 
 }

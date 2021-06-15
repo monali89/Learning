@@ -1,19 +1,73 @@
 package ltcd;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 public class InsertInterval_57 {
 
     public int[][] insert(int[][] intervals, int[] newInterval) {
 
+        Stack<Interval> stack1 = new Stack<Interval>();
+        Stack<Interval> stack2 = new Stack<Interval>();
+        Interval newInt = new Interval(newInterval);
+
+        stack2.push(newInt);
+
+        // insert all intervals along with new interval
+        // onto stack 1 in ascending order of start time
+        int i = intervals.length-1;
+        while (i > -1) {
+            if (intervals[i][0] >= newInterval[0] || stack2.isEmpty()) {
+                stack1.push(new Interval(intervals[i]));
+                i--;
+            } else {
+                stack1.push(stack2.pop());
+            }
+        }
+        if (!stack2.isEmpty()) stack1.push(stack2.pop());
+
+        // Use two stacks - stack1 which will have the initial interval array
+        // along with new interval merged in ascending order,
+        // stack2 where we will be pushing the merged intervals.
+        // Take top elements from both stack, if they can be merged,
+        // push the merged interval to stack2 or push both intervals to stack2
+
+        while (!stack1.isEmpty()) {
+            Interval old = stack1.pop();
+            Interval fresh = stack2.isEmpty() ? null : stack2.pop();
+
+            if (fresh == null) {
+                stack2.push(old);
+            } else {
+                if (old.isOverlapping(fresh)) {
+                    Interval merged = old.merge(fresh);
+                    stack2.push(merged);
+                } else {
+                    stack2.push(fresh);
+                    stack2.push(old);
+                }
+            }
+        }
+
+        int[][] result = new int[stack2.size()][2];
+        for (int j = stack2.size() - 1; j >= 0; j--) {
+            result[j] = stack2.pop().getArray();
+        }
+        return result;
+    }
+
+    public int[][] insert_2(int[][] intervals, int[] newInterval) {
+
         Stack<Interval> stack = new Stack<Interval>();
-        Interval new_int = new Interval(newInterval);
-        if (intervals.length <= 0) stack.push(new_int);
+        Interval newInt = new Interval(newInterval);
+
+        if (intervals.length <= 0) stack.push(newInt);
 
         for (int[] interval : intervals) {
             Interval curr = new Interval(interval);
-            if (curr.isOverlapping(new_int)) {
-                Interval merged = curr.merge(new_int);
+            if (curr.isOverlapping(newInt)) {
+                Interval merged = curr.merge(newInt);
                 if (stack.isEmpty()) {
                     stack.push(merged);
                     continue;

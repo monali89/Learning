@@ -1,55 +1,88 @@
 package ltcd_2;
 
-/**
- * @author Monali L on 6/12/2021
- */
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class GoodSplit_1525 {
 
     public int numSplits(String s) {
+
+        Map<Character ,Integer> left = new HashMap<Character, Integer>();
+        Map<Character ,Integer> right = new HashMap<Character, Integer>();
+
+        // Initially put all the characters and their counts in the right map,
+        // as we will be traversing the string from left to right
+
+        for (int i = 0; i < s.length(); i++) {
+            if (right.containsKey(s.charAt(i))) {
+                int c = right.get(s.charAt(i));
+                right.put(s.charAt(i), c+1);
+            } else {
+                right.put(s.charAt(i), 1);
+            }
+        }
+
+        // Now traverse the string from left to right, pausing at
+        // each index and checking if that char is present in the left.
+        // If it is present in the left side, decrease it's count by 1
+        // from right side and increment by 1 in left side.
+        // If the count at right side goes below 1, delete this char.
+        // After this, if the size of left == right,
+        // then we found a good split for the string.
+
         int goodSplits = 0;
-        for (int i=1; i < s.length(); i++) {
-            String s1 = s.substring(0, i+1);
-            String s2 = s.substring(i);
-            if (uniqueCount(s1) == uniqueCount(s2)) goodSplits++;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (right.containsKey(c)) {
+                int count = right.get(c);
+                if (count - 1 <= 0) right.remove(c);
+                else right.put(c, count-1);
+            }
+            if (left.containsKey(c)) {
+                int count = left.get(c);
+                left.put(c, count+1);
+            } else {
+                left.put(c, 1);
+            }
+
+            if (left.size() == right.size()) goodSplits++;
         }
         return goodSplits;
-    }
-
-    private int uniqueCount(String s) {
-        char[] c = s.toCharArray();
-        int orCount = (c[0] - 'a') + 1;
-        int xorCount = (c[0] - 'a') + 1;
-        System.out.println(c[0] + " | " + orCount + " | " + xorCount);
-        for (int i=1; i < c.length; i++) {
-            orCount = (orCount | (c[i] - 'a' + 1));
-            xorCount = xorCount + (xorCount ^ (c[i] - 'a' + 1));
-            System.out.println(c[i] + " | " + orCount + " | " + xorCount);
-        }
-        return (orCount - xorCount);
     }
 
     public static void main(String[] args) {
 
         GoodSplit_1525 object = new GoodSplit_1525();
         String input = "";
+        int output;
+        int expected;
 
-        //System.out.println(object.uniqueCount("aacaba"));
-        System.out.println('a' | 'a');
-        System.out.println('a' ^ 'a');
-        System.out.println('a' | 'd');
-        System.out.println('a' ^ 'd');
-
-        /*input = "aacaba";
-        System.out.println(input + ": " + object.numSplits(input));
+        input = "aacaba";
+        output = object.numSplits(input);
+        expected = 2;
+        System.out.printf("Input: %10s | Output: %s | Expected: %s | Result: %s", input, output, expected, (output == expected));
+        System.out.println();
 
         input = "abcd";
-        System.out.println(input + ": " + object.numSplits(input));
+        output = object.numSplits(input);
+        expected = 1;
+        System.out.printf("Input: %10s | Output: %s | Expected: %s | Result: %s", input, output, expected, (output == expected));
+        System.out.println();
 
         input = "aaaaa";
-        System.out.println(input + ": " + object.numSplits(input));
+        output = object.numSplits(input);
+        expected = 4;
+        System.out.printf("Input: %10s | Output: %s | Expected: %s | Result: %s", input, output, expected, (output == expected));
+        System.out.println();
 
         input = "acbadbaada";
-        System.out.println(input + ": " + object.numSplits(input));*/
+        output = object.numSplits(input);
+        expected = 2;
+        System.out.printf("Input: %10s | Output: %s | Expected: %s | Result: %s", input, output, expected, (output == expected));
+        System.out.println();
     }
 }

@@ -41,7 +41,8 @@ public class DecodeString_394 {
                 int currCount = countStack.pop();
                 for (int i = 0; i < currCount; i++)
                     repeated.append(currStr);
-                stringStack.push(repeated.toString());
+                currStr = stringStack.pop() + repeated.toString();
+                stringStack.push(currStr);
             }
             ctr++;
         }
@@ -59,11 +60,11 @@ public class DecodeString_394 {
         String expected = "";
 
         // example 1
-        /*input = "3[a]2[bc]";
+        input = "3[a]2[bc]";
         output = object.decodeString(input);
         expected = "aaabcbc";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
-                " | Equal: " + (output.equals(expected)));*/
+                " | Equal: " + (output.equals(expected)));
 
         // example 2
         input = "3[a2[c]]";
@@ -73,7 +74,7 @@ public class DecodeString_394 {
                 " | Equal: " + (output.equals(expected)));
 
         // example 3
-        /*input = "2[abc]3[cd]ef";
+        input = "2[abc]3[cd]ef";
         output = object.decodeString(input);
         expected = "abcabccdcdcdef";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
@@ -84,7 +85,7 @@ public class DecodeString_394 {
         output = object.decodeString(input);
         expected = "abccdcdcdxyz";
         System.out.println("Input: " + input + " | Expected: " + expected + " | Actual: " + output +
-                " | Equal: " + (output.equals(expected)));*/
+                " | Equal: " + (output.equals(expected)));
     }
 
 }

@@ -1,27 +1,34 @@
 package ltcd_2;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
-
-/**
- * @author Monali L on 6/12/2021
- */
+import java.util.Map;
 
 public class TimeToInformEmployees_1376 {
 
-    private int[] m;
     private int[] t;
-    private int n;
+    private Map<Integer, List<Integer>> map;
 
     public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
 
         int totalTime = 0;
 
-        this.n = n;
-        this.m = manager;
         this.t = informTime;
+        map = new HashMap<Integer, List<Integer>>();
+
+        // Create a manager <-> subordinate storage for fast access
+        for (int i = 0; i < manager.length; i++) {
+            List<Integer> subs;
+            if (map.containsKey(manager[i])) {
+                subs = map.get(manager[i]);
+
+            } else {
+                subs = new ArrayList<Integer>();
+            }
+            subs.add(i);
+            map.put(manager[i], subs);
+        }
 
         totalTime = getTime(headID);
 
@@ -32,10 +39,8 @@ public class TimeToInformEmployees_1376 {
         if (t[currManager] == 0) return 0;
 
         int totalTime = 0;
-        for (int i = 0; i < n; i++) {
-            if (m[i] == currManager) {
-                totalTime = Math.max(totalTime, getTime(i));
-            }
+        for (int i: map.get(currManager)) {
+            totalTime = Math.max(totalTime, getTime(i));
         }
         return totalTime + t[currManager];
     }

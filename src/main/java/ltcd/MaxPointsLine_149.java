@@ -8,12 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Date: 6/26/2019
- * @author: Monali
- */
-
-public class MaxPointsLine {
+public class MaxPointsLine_149 {
 
     @Test
     public void test01(){
@@ -38,7 +33,7 @@ public class MaxPointsLine {
                 }else if(points[i][0] == points[j][0]){
                     slope = 0.0;
                 }else{
-                    slope = Double.valueOf((points[i][1] - points[j][1])/(points[i][0] - points[j][0]));
+                    slope = (double) ((points[i][1] - points[j][1]) / (points[i][0] - points[j][0]));
                 }
 
                 Set<String> set;
@@ -56,15 +51,60 @@ public class MaxPointsLine {
                 }
 
                 rslt = Math.max(map.get(slope).size(), rslt);
-                System.out.println(points[i][0] + "," + points[i][1] + " | " + points[j][0] + "," + points[j][1] + " | " + slope);
+                //System.out.println(points[i][0] + "," + points[i][1] + " | " + points[j][0] + "," + points[j][1] + " | " + slope);
             }
         }
-        System.out.println(map);
+        //System.out.println(map);
         return rslt;
     }
+
+    public static void main(String[] args) {
+
+        MaxPointsLine_149 object = new MaxPointsLine_149();
+        int[][] input;
+        int output;
+        int expected;
+
+        // example 1
+        input = new int[][] {{1,1},{2,2},{3,3}};
+        expected = 3;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+
+        // example 2
+        input = new int[][] {{1,1},{3,2},{5,3},{4,1},{2,3},{1,4}};
+        expected = 4;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+
+        // after submitting 1
+        input = new int[][] {{1,0},{0,0}};
+        expected = 2;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+
+        // after submitting 2
+        input = new int[][] {{0,0},{1,1}};
+        expected = 2;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+
+        // after submitting 3
+        input = new int[][] {{4,5},{4,-1},{4,0}};
+        expected = 3;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+
+        // after submitting 4
+        input = new int[][] {{84,250},{0,0},{0,-70},{-42,-230},{21,10},{42,90},{1,0},{1,-1}};
+        expected = 5;
+        output = object.maxPoints(input);
+        System.out.printf("Expected: %s | Output: %s | Result: %s", expected, output, (expected == output));
+        System.out.println();
+    }
 }
-
-
-/*
-* Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
-* */

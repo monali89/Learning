@@ -1,22 +1,28 @@
 package ltcd_2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CountSmallNumsAfterSelf_315 {
 
-    private Map<Integer, Integer> map;
+    private Map<Integer, Integer> counts;
 
     public List<Integer> countSmaller(int[] nums) {
-        map = new HashMap<Integer, Integer>();
+
+        counts = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            counts.put(i, 0);
+        }
 
         mergeSort(nums, 0, nums.length-1);
         for (int i = 0; i < nums.length; i++) {
-            System.out.println(nums[i]);
+            System.out.print(nums[i] + " ");
         }
+        System.out.println();
 
-        return null;
+        return new ArrayList<Integer>(counts.values());
     }
 
     private void merge(int[] nums, int l, int m, int r) {
@@ -39,6 +45,9 @@ public class CountSmallNumsAfterSelf_315 {
                 nums[mIdx] = left[lIdx++];
             } else {
                 nums[mIdx] = right[rIdx++];
+                for (int i = lIdx; i < left.length; i++) {
+                    counts.put(l + i, counts.get(l + i)+1);
+                }
             }
             mIdx++;
         }
@@ -72,22 +81,48 @@ public class CountSmallNumsAfterSelf_315 {
         String expected;
 
         // example 1
-        input = new int[] {5,2,6,1};
-        expected = "2,1,1,0";
+        /*input = new int[] {5,2,6,1};
+        expected = "[2,1,1,0]";
         output = object.countSmaller(input);
         System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
 
         // example 2
-        /*input = new int[] {-1};
-        expected = "0";
+        input = new int[] {-1};
+        expected = "[0]";
         output = object.countSmaller(input);
         System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
 
         // example 3
         input = new int[] {-1, -1};
-        expected = "0";
+        expected = "[0, 0]";
+        output = object.countSmaller(input);
+        System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
+
+        input = new int[] {1, 2, 3, 4, 5};
+        expected = "[0, 0, 0, 0, 0]";
+        output = object.countSmaller(input);
+        System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
+
+        input = new int[] {5, 4, 3, 2, 1, -1};
+        expected = "[5, 4, 3, 2, 1, 0]";
+        output = object.countSmaller(input);
+        System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
+
+        input = new int[] {11, 11, 11, 11, 11, 11};
+        expected = "[0, 0, 0, 0, 0, 0]";
+        output = object.countSmaller(input);
+        System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
+
+        // after submit test 1
+        input = new int[] {0, 2, 1};
+        expected = "[0, 1, 0]";
         output = object.countSmaller(input);
         System.out.printf("Output: %s | Expected: %s\n\n", output, expected);*/
+
+        input = new int[] {2, 0, 1};
+        expected = "[2, 0, 0]";
+        output = object.countSmaller(input);
+        System.out.printf("Output: %s | Expected: %s\n\n", output, expected);
     }
 
 }

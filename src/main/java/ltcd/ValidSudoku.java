@@ -1,6 +1,8 @@
 package ltcd;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ValidSudoku {
@@ -19,42 +21,54 @@ public class ValidSudoku {
                 {'.','.','4','.','.','.','.','.','.'}
         };
 
-        System.out.println(isValidSudoku(input));
-    }
+        char[][] input2 = new char[][] {
+                {'.','8','7','6','5','4','3','2','1'},
+                {'2','.','.','.','.','.','.','.','.'},
+                {'3','.','.','.','.','.','.','.','.'},
+                {'4','.','.','.','.','.','.','.','.'},
+                {'5','.','.','.','.','.','.','.','.'},
+                {'6','.','.','.','.','.','.','.','.'},
+                {'7','.','.','.','.','.','.','.','.'},
+                {'8','.','.','.','.','.','.','.','.'},
+                {'9','.','.','.','.','.','.','.','.'}};
 
-    static char[][] b;
+        char[][] input3 = new char[][] {
+                {'8','3','.','.','7','.','.','.','.'},
+                {'6','.','.','1','9','5','.','.','.'},
+                {'.','9','8','.','.','.','.','6','.'},
+                {'8','.','.','.','6','.','.','.','3'},
+                {'4','.','.','8','.','3','.','.','1'},
+                {'7','.','.','.','2','.','.','.','6'},
+                {'.','6','.','.','.','.','2','8','.'},
+                {'.','.','.','4','1','9','.','.','5'},
+                {'.','.','.','.','8','.','.','7','9'}};
+
+        System.out.println(isValidSudoku(input3));
+    }
 
     public static boolean isValidSudoku(char[][] board) {
-        b = board;
-        for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++){
-                if(helper(i, j)) continue;
-                else return false;
+
+        Set<String> set = new HashSet<String>();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') continue;
+                String s = String.valueOf(board[i][j]);
+                System.out.println("Adding: " + (s + " in row " + i) + ", " +
+                        (s + " in col " + j) + ", " +
+                        (s + " in block " + i/3 + "-" + j/3));
+                if (set.contains(s + " in row " + i)
+                        || set.contains(s + " in col " + j)
+                        || set.contains(s + " in block " + i/3 + "-" + j/3)) {
+                    System.out.println(set);
+                    return false;
+                } else {
+                    set.add(s + " in row " + i);
+                    set.add(s + " in col " + j);
+                    set.add(s + " in block " + i/3 + "-" + j/3);
+                }
             }
         }
-        return true;
-    }
-
-    public static boolean helper(int row, int col){ // 0,0
-
-        System.out.println("For " + row + ", " + col);
-
-        Set<Character> setRow = new HashSet<Character>();
-        Set<Character> setCol = new HashSet<Character>();
-
-        for(int i=0; i<9; i++){
-            //if(i == col) continue;
-            if(setRow.contains(b[row][i])) return false;
-            if(b[row][i] != '.') setRow.add(b[row][i]);
-        }
-
-        for(int i=0; i<9; i++){
-            //if(i == col) continue;
-            if(setCol.contains(b[i][col])) return false;
-            if(b[i][col] != '.') setCol.add(b[i][col]);
-        }
-
-        System.out.println(setRow + ", " + setCol);
 
         return true;
     }

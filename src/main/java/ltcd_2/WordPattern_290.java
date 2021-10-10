@@ -13,20 +13,19 @@ public class WordPattern_290 {
 
         if (arr.length != pattern.length()) return false;
 
-        Map<Character, String> mapCharToString = new HashMap<Character, String>();
-        Map<String, Character> mapStringToChar = new HashMap<String, Character>();
+        Map<String, Character> map = new HashMap<String, Character>();
 
-        for (int i=0; i<arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             char c = pattern.charAt(i);
 
-            if (mapCharToString.containsKey(c)) {
-                if (!mapStringToChar.containsKey(arr[i])) return false;
-                if (!mapCharToString.get(c).equals(arr[i]) || mapStringToChar.get(arr[i]) != c) return false;
+            if (map.containsKey(arr[i])) {
+                if (map.get(arr[i]) != c) return false;
             } else {
-                mapCharToString.put(c, arr[i]);
-                mapStringToChar.put(arr[i], c);
+                if (map.containsValue(c)) return false;
+                map.put(arr[i], c);
             }
         }
+
         return true;
     }
 
@@ -49,6 +48,11 @@ public class WordPattern_290 {
 
         // test 3
         pattern = "abba"; s = "dog cat cat fish";
+        expected = false;
+        Common.printResult("Pattern: " + pattern + " | String: " + s, object.wordPattern(pattern, s), expected);
+
+        // test 4
+        pattern = "abc"; s = "dog cat dog";
         expected = false;
         Common.printResult("Pattern: " + pattern + " | String: " + s, object.wordPattern(pattern, s), expected);
     }

@@ -1,5 +1,7 @@
 package ltcd;
 
+import common.Common;
+
 /**
  * @author: monali on 5/9/2019
  * Problem: Given an array of integers and an integer k,
@@ -11,14 +13,52 @@ package ltcd;
 public class SubarraySumEqualsK {
 
     public static void main(String[] args) {
-        int[] input = {1,2,1,3,0,2,1,4};
-        System.out.println(subarraySum(input, 5));
-        System.out.println();
-        input = new int[]{1,1,1};
-        System.out.println(subarraySum(input, 2));
+
+        SubarraySumEqualsK object = new SubarraySumEqualsK();
+        int[] input;
+        int expected;
+        int output;
+        int k;
+
+        // test 1
+        input = new int[] {1,2,1,3,0,2,1,4};
+        k = 5;
+        expected = 2;
+        output = object.subarraySum(input, k);
+        System.out.println("Input: " + Common.arrayToString(input) +
+                " | Output: " + output + " | Expected: " + expected);
+
+        // test 2
+        input = new int[] {1,1,1};
+        k = 2;
+        expected = 2;
+        output = object.subarraySum(input, k);
+        System.out.println("Input: " + Common.arrayToString(input) +
+                " | Output: " + output + " | Expected: " + expected);
+
+        // test 3
+        input = new int[] {1};
+        k = 1;
+        expected = 1;
+        output = object.subarraySum(input, k);
+        System.out.println("Input: " + Common.arrayToString(input) +
+                " | Output: " + output + " | Expected: " + expected);
+
+        // test 4
+        input = new int[] {-1,-1,1};
+        k = 1;
+        expected = 1;
+        output = object.subarraySum(input, k);
+        System.out.println("Input: " + Common.arrayToString(input) +
+                " | Output: " + output + " | Expected: " + expected);
     }
 
-    public static int subarraySum(int[] nums, int k) {
+    public int subarraySum(int[] nums, int k) {
+
+        if (nums.length < 1) return 0;
+        if (nums.length == 1) {
+            return nums[0] == k ? 1 : 0;
+        }
 
         int count = 0;
         int sum = 0;

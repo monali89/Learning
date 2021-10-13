@@ -12,6 +12,12 @@ public class Common {
         return str.toString();
     }
 
+    public static void printStringArray(String[] arr) {
+        for (String str: arr) {
+            System.out.println(str);
+        }
+    }
+
     public static void printResult(String input, String output, String expected) {
         System.out.println("Input: " + input +
                 " | Output: " + output +

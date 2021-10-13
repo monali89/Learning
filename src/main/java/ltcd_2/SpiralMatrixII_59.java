@@ -10,69 +10,64 @@ public class SpiralMatrixII_59 {
 
         int[][] result = new int[n][n];
 
+        int top = 0, bottom = n-1;
+        int left = 0, right = n-1;
         int ctr = 1;
-        int i = 0, j = 0;
-        int l = 0, r = n-1, t = 0, b = n-1;
 
-        while (ctr <= n*n) {
+        while (top <= bottom && left <= right & ctr <= n*n) {
 
             // left to right
-            while (j < r) {
-                result[i][j] = ctr++;
-                j++;
+            for (int i = left; i <= right; i++) {
+                result[top][i] = ctr++;
             }
-            j = r;
-            r--;
+            top++;
 
             // top to bottom
-            while (i < b) {
-                result[i][j] = ctr++;
-                i++;
+            for (int i = top; i <= bottom; i++) {
+                result[i][right] = ctr++;
             }
-            i = b;
-            b--;
+            right--;
 
             // right to left
-            while (j >= 0) {
-                j--;
-                result[i][j] = ctr++;
+            for (int i = right; i >= left ; i--) {
+                result[bottom][i] = ctr++;
             }
+            bottom--;
 
-
-            if (j < r) {
-                j++;
+            // bottom to top
+            for (int i = bottom; i >= top; i--) {
+                result[i][left] = ctr++;
             }
-
-            // top to bottom
-            if (j == r) {
-
-            }
-
-            // top-right
-            if (j < r) {
-                j++;
-            } else {
-                i++;
-            }
-
-            // bottom-right
-
-            // bottom-left
-
-            // top-left
-
+            left++;
         }
 
         return result;
-
     }
 
     public static void main(String[] args) {
         SpiralMatrixII_59 object = new SpiralMatrixII_59();
         int input;
+        int[][] output;
 
         // test 1
         input = 3;
+        output = object.generateMatrix(input);
+        object.print2DArray(output);
+
+        // test 2
+        input = 1;
+        output = object.generateMatrix(input);
+        object.print2DArray(output);
+
+        // test 2
+        input = 2;
+        output = object.generateMatrix(input);
+        object.print2DArray(output);
+
+        // test 3
+        input = 5;
+        output = object.generateMatrix(input);
+        object.print2DArray(output);
     }
 
     private void print2DArray(int[][] a) {
@@ -82,5 +77,6 @@ public class SpiralMatrixII_59 {
             }
             System.out.println();
         }
+        System.out.println();
     }
 }

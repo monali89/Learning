@@ -7,28 +7,12 @@ import java.util.Arrays;
 public class BTFromPreInTraversal_105 {
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
+
         if (preorder.length <= 0 || inorder.length == 0) return null;
-        return helper(preorder, inorder);
+        return helper(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
     }
 
-    public static TreeNode helper(int[] pre, int[] in) { // ind = 0
-
-        if ((in.length != pre.length) || pre.length <= 0) return null;
-
-        TreeNode n = new TreeNode(pre[0]);
-        if (pre.length > 1) {
-            int curr = 0;
-            while (in[curr] != pre[0]) curr++;
-            n.left = helper(Arrays.copyOfRange(pre, 1, curr+1),
-                    Arrays.copyOfRange(in, 0, curr));
-            n.right = helper(Arrays.copyOfRange(pre, curr+1, pre.length),
-                    Arrays.copyOfRange(in, curr+1, in.length));
-
-        }
-        return n;
-    }
-
-    private TreeNode helper_2(int[] pre, int sp, int ep, int[] in, int si, int ei) {
+    private TreeNode helper(int[] pre, int sp, int ep, int[] in, int si, int ei) {
 
         if (sp > ep || si > ei) return null;
 
@@ -39,11 +23,26 @@ public class BTFromPreInTraversal_105 {
         while (ctr < in.length && in[ctr] != pre[sp]) ctr++;
 
         // everything left to ctr in inorder will go to left subtree
-        node.left = helper_2(pre, sp+1, ep, in, si, ctr-1);
+        if (si <= (ctr-1)) sp = sp+1;
+        node.left = helper(pre, sp, ep, in, si, ctr-1);
 
         // everything right to ctr in inorder will go to left subtree
-        node.right = helper_2(pre, sp+2, ep, in, ctr+1, ei);
+        if ((ctr+1) <= ei) sp = sp+1;
+        node.right = helper(pre, sp, ep, in, ctr+1, ei);
 
         return node;
+    }
+
+    public static void main(String[] args) {
+        BTFromPreInTraversal_105 object = new BTFromPreInTraversal_105();
+        int[] preorder;
+        int[] inorder;
+        TreeNode root;
+
+        // test 1
+        preorder = new int[] {3,1,2,4};
+        inorder = new int[] {1,2,3,4};
+        root = object.buildTree(preorder, inorder);
+        root.printTree(root);
     }
 }

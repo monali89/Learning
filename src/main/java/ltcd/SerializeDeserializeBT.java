@@ -1,13 +1,9 @@
 package ltcd;
 
-import trees.BinaryTree;
-import trees.TreeNode;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.Before;
-
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @author: monali on 5/8/2019
@@ -15,106 +11,129 @@ import java.util.List;
 
 public class SerializeDeserializeBT extends TreeNode {
 
-    TreeNode root;
-    BinaryTree bt;
-
-    @Before
-    public void setup(){
-        root = new TreeNode(1);
-        bt = new BinaryTree(root);
-        root = bt.insert(root, 2);
-        root = bt.insert(root, 3);
-        root = bt.insert(root, 4);
-        root = bt.insert(root, 5);
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
     }
-
-    @Test
-    public void test01(){
-        Assert.assertEquals("", serialize(root));
-    }
-
-    String r;
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
 
-        if(root == null) return "[]";
-        List<TreeNode> l = new ArrayList<TreeNode>();
-        r = "[" + root.getData();
-        l.add(root);
-        int h = getHeight(root);
-        for(int i=1; i<=h; i++){
-            l = helper(l);
+        if (root == null) return "[]";
+
+        List<String> list = new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+
+        int count = 1;
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+
+            int next = 0;
+
+            for (int i = 0; i < count; i++) {
+
+                TreeNode curr = queue.remove();
+
+                if (curr.val == -2000) {
+                    list.add("null");
+                } else {
+                    list.add(String.valueOf(curr.val));
+
+                    queue.add((curr.left != null) ? curr.left : new TreeNode(-2000));
+                    queue.add((curr.right != null) ? curr.right : new TreeNode(-2000));
+                    next = next+2;
+                }
+            }
+            count = next;
         }
-        r = r + "]";
-        return r;
+
+        String temp = list.get(list.size()-1);
+        while (temp.equals("null")) {
+            list.remove(list.size()-1);
+            temp = list.get(list.size()-1);
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("[");
+
+        for (String s : list) {
+            result.append(s);
+            result.append(",");
+        }
+        result.deleteCharAt(result.length()-1);
+        result.append("]");
+
+        return result.toString();
     }
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
 
+        if (data.length() <= 2) return null;
+
         data = data.replace("[", "");
         data = data.replace("]", "");
-        System.out.println(data);
+        String[] arr = data.split(",");
 
-        String[] d = data.split(",");
+        if (arr.length == 0) return null;
 
-        if(d.length < 1) return null;
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
+        queue.add(root);
+        int ctr = 1;
 
-        List<TreeNode> l = new ArrayList<TreeNode>();
-        TreeNode root = new TreeNode(Integer.valueOf(d[0]));
-        l.add(root);
+        while (ctr < arr.length && !queue.isEmpty()) {
+            TreeNode curr = queue.remove();
 
-        int i = 1;
-
-        while(i < d.length){
-            List<TreeNode> cl = new ArrayList<TreeNode>();
-            for(TreeNode t: l){
-                System.out.println(d[i]);
-                if(i < d.length && d[i] != "null"){
-                    t.setLeft(new TreeNode(Integer.valueOf(d[i++])));
-                    cl.add(t.getLeft());
-                }else{
-                    //t.left = null;
-                    i++;
-                }
-                System.out.println(d[i]);
-                if(i < d.length && d[i] != "null"){
-                    t.setRight(new TreeNode(Integer.valueOf(d[i++])));
-                    cl.add(t.getRight());
-                }else{
-                    //t.right = null;
-                    i++;
-                }
+            if (!arr[ctr].equals("null")) {
+                curr.left = new TreeNode(Integer.parseInt(arr[ctr]));
+                queue.add(curr.left);
             }
-            l = cl;
+            ctr++;
+
+            if (ctr < arr.length && !arr[ctr].equals("null")) {
+                curr.right = new TreeNode(Integer.parseInt(arr[ctr]));
+                queue.add(curr.right);
+            }
+            ctr++;
         }
+
         return root;
     }
 
-    public List<TreeNode> helper(List<TreeNode> l){
-        List<TreeNode> cl = new ArrayList<TreeNode>();
-        for(TreeNode t: l){
-            if(t.getLeft() != null){
-                cl.add(t.getLeft());
-                r = r + "," + t.getLeft().getData();
-            } else{
-                r = r + ",null";
-            }
-            if(t.getRight() != null){
-                cl.add(t.getRight());
-                r = r + "," + t.getRight().getData();
-            } else{
-                r = r + ",null";
-            }
-        }
-        return cl;
+    public static void main(String[] args) {
+
+        SerializeDeserializeBT object = new SerializeDeserializeBT();
+        String input = "";
+        TreeNode root;
+
+        input = "[1,2,3,null,null,4,5]";
+        root = object.deserialize(input);
+        System.out.println(object.serialize(root));
+
+        input = "[]";
+        root = object.deserialize(input);
+        System.out.println(object.serialize(root));
+
+        input = "[1]";
+        root = object.deserialize(input);
+        System.out.println(object.serialize(root));
+
+        input = "[1,2]";
+        root = object.deserialize(input);
+        System.out.println(object.serialize(root));
+
     }
 
-    public int getHeight(TreeNode root){
-        if(root == null) return 0;
-        return Math.max(getHeight(root.getLeft()), getHeight(root.getRight())) + 1;
-    }
 }
 
 

@@ -1,40 +1,33 @@
 package ltcd_2;
 
-import common.Common;
-
 import java.util.Arrays;
+import java.util.Stack;
 
 public class NonOverlappingInterval_435 {
 
     public int eraseOverlapIntervals(int[][] intervals) {
 
-        if (intervals.length == 0) return 0;
-        if (intervals.length == 1) return 1;
-
-        int count = 0;
+        if (intervals.length <= 1) return 0;
 
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
 
-        for (int i = 0; i < intervals.length; i++) {
-            System.out.println(intervals[i][0] + ", " + intervals[i][1]);
-        }
+        int count = 0;
 
-        int s = intervals[0][0];
-        int e = intervals[0][1];
+        int prevEnd = intervals[0][1];
 
         for (int i = 1; i < intervals.length; i++) {
+            int[] curr = intervals[i];
 
-            if (intervals[i][0] <= e) {
+            // is overlapping
+            if (prevEnd > curr[0]) {
                 count++;
-                s = Math.min(s, intervals[i][0]);
-                e = Math.max(e, intervals[i][1]);
+                prevEnd = Math.min(prevEnd, curr[1]);
             } else {
-                s = intervals[i][0];
-                e = intervals[i][1];
+                prevEnd = curr[1];
             }
         }
 
-        return intervals.length - count;
+        return count;
     }
 
     public static void main(String[] args) {

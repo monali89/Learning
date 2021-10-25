@@ -51,9 +51,39 @@ public class SubarraySumEqualsK {
         output = object.subarraySum(input, k);
         System.out.println("Input: " + Common.arrayToString(input) +
                 " | Output: " + output + " | Expected: " + expected);
+
+        input = new int[] {1,-1,0};
+        k = 0;
+        expected = 3;
+        output = object.subarraySum(input, k);
+        System.out.println("Input: " + Common.arrayToString(input) +
+                " | Output: " + output + " | Expected: " + expected);
     }
 
     public int subarraySum(int[] nums, int k) {
+
+        if (nums.length <= 0) return 0;
+
+        int count = 0;
+        int[] sum = new int[nums.length];
+        
+        sum[0] = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            sum[i] = nums[i] + sum[i-1];
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (sum[i] == k) count++;
+            for (int j = i+1; j < nums.length; j++) {
+                if (sum[j] - sum[i] == k) count++;
+            }
+        }
+        
+        return count;
+    }
+
+    /*public int subarraySum(int[] nums, int k) {
 
         if (nums.length < 1) return 0;
         if (nums.length == 1) {
@@ -76,6 +106,6 @@ public class SubarraySumEqualsK {
         }
         if(sum == k) count++;
         return count;
-    }
+    }*/
 
 }

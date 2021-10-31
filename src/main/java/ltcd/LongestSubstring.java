@@ -3,18 +3,44 @@ package ltcd;
 import org.junit.Assert;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LongestSubstring {
 
     public static void main(String[] args) {
         Assert.assertEquals(3, lengthOfLongestSubstringTwoDistinct("abcabcbb"));
-        //Assert.assertEquals(4, lengthOfLongestSubstringTwoDistinct("eceba"));
-        //Assert.assertEquals(1, lengthOfLongestSubstringTwoDistinct("aa"));
-        //Assert.assertEquals(4, lengthOfLongestSubstringTwoDistinct("abbcefffddacbbef"));
+        Assert.assertEquals(4, lengthOfLongestSubstringTwoDistinct("eceba"));
+        Assert.assertEquals(1, lengthOfLongestSubstringTwoDistinct("aa"));
+        Assert.assertEquals(4, lengthOfLongestSubstringTwoDistinct("abbcefffddacbbef"));
     }
 
     public static int lengthOfLongestSubstringTwoDistinct(String s) {
+
+        if (s.length() <= 0) return 0;
+
+        Set<Character> set = new HashSet<>();
+        int l = 0;
+        int r = 0;
+        int maxLen = 1;
+
+        while (l < s.length() && r < s.length()) {
+
+            if (set.contains(s.charAt(r))) {
+                set.remove(s.charAt(l));
+                l++;
+            } else {
+                set.add(s.charAt(r));
+                r++;
+                maxLen = Math.max(maxLen, set.size());
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static int lengthOfLongestSubstringTwoDistinct_2(String s) {
         int len = 0;
         Map<Character, Integer> map = new HashMap<Character, Integer>();
 

@@ -67,5 +67,11 @@ public class PermutationInString_567 {
         expected = false;
         Common.printResult(inputS1 + ", " + inputS2, output, expected);
 
+        inputS1 = "adc";
+        inputS2 = "dcda";
+        output = object.checkInclusion(inputS1, inputS2);
+        expected = true;
+        Common.printResult(inputS1 + ", " + inputS2, output, expected);
+
     }
 }

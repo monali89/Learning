@@ -6,18 +6,22 @@ public class MaximumProductSubarray_152 {
 
     public int maxProduct(int[] nums) {
 
-        int maxProd = Integer.MIN_VALUE;
+        int finalMaxProd = Integer.MIN_VALUE;
 
-        for(int i=0; i<nums.length; i++){
-            int currProd = 1;
-            for(int j=i; j<nums.length; j++){
-                currProd = currProd * nums[j];
-                System.out.println(j + " | " + nums[j] + " | " + currProd);
-                maxProd = Math.max(maxProd, currProd);
-            }
-            System.out.println("****** " + i + " | " + nums[i] + " | " + maxProd);
+        int maxProd = nums[0];
+        int minProd = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            int currMax = maxProd * nums[i];
+            int currMin = minProd * nums[i];
+
+            maxProd = Math.max( Math.max(currMax, currMin), nums[i]);
+            minProd = Math.min( Math.min(currMax, currMin), nums[i]);
+
+            finalMaxProd = Math.max(finalMaxProd, maxProd);
         }
-        return maxProd;
+
+        return finalMaxProd;
     }
 
     public static void main(String[] args) {
@@ -27,14 +31,29 @@ public class MaximumProductSubarray_152 {
         int output;
         int expected;
 
-        /*input = new int[] {2,3,-2,4};
+        input = new int[] {2,3,-2,4};
         output = object.maxProduct(input);
         expected = 6;
-        Common.printResult(Common.arrayToString(input), output, expected);*/
+        Common.printResult(Common.arrayToString(input), output, expected);
 
         input = new int[] {-2,2,3,4};
         output = object.maxProduct(input);
-        expected = 6;
+        expected = 24;
+        Common.printResult(Common.arrayToString(input), output, expected);
+
+        input = new int[] {-2,3,-4};
+        output = object.maxProduct(input);
+        expected = 24;
+        Common.printResult(Common.arrayToString(input), output, expected);
+
+        input = new int[] {1,-2,-3,4};
+        output = object.maxProduct(input);
+        expected = 24;
+        Common.printResult(Common.arrayToString(input), output, expected);
+
+        input = new int[] {-1,-2,-9,-6};
+        output = object.maxProduct(input);
+        expected = 108;
         Common.printResult(Common.arrayToString(input), output, expected);
 
     }

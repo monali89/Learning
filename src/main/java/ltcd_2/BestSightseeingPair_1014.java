@@ -10,7 +10,7 @@ public class BestSightseeingPair_1014 {
 
         int firstMax = 0;
         int total = 0;
-        
+
         for (int k = 0; k < n; k++) {
 
             int iPlus = values[k] + k;

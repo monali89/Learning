@@ -7,29 +7,35 @@ public class BestSightseeingPair_1014 {
     public int maxScoreSightseeingPair(int[] values) {
 
         int n = values.length;
-
-        int[] iPlus = new int[n];
-        int[] jMinus = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            iPlus[i] = values[i] + i;
-        }
+        int firstMax = 0;
+        int secMax = 0;
+        int total = 0;
 
         for (int i = 0; i < n; i++) {
-            jMinus[i] = values[i] - i;
-        }
 
-        int max = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = i+1; j < n; j++) {
-                max = Math.max(max,iPlus[i] + jMinus[j]);
+            if (i == 0) {
+                firstMax = values[i];
+                total = values[i] + i;
+            } else if (i == n-1) {
+                int jMinus = values[i] - i;
+                if (jMinus > secMax) {
+                    secMax = jMinus;
+                }
+                total = firstMax + secMax;
+            } else {
+                int iPlus = values[i] + i;
+                int jMinus = values[i] - i;
+
+                if (iPlus > firstMax) {
+                    firstMax = iPlus;
+                }
+                if (jMinus > secMax) {
+                    secMax = jMinus;
+                }
+                total = iPlus + secMax;
             }
         }
-
-        System.out.println(Common.arrayToString(iPlus));
-        System.out.println(Common.arrayToString(jMinus));
-
-        return max;
+        return total;
     }
 
     public static void main(String[] args) {

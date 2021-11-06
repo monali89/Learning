@@ -22,6 +22,9 @@ public class LetterCasePermutation_784 {
             if (c >= 'a' && c <= 'z') {
                 helper(list, temp.append(Character.toUpperCase(c)), s, index+1);
                 temp.deleteCharAt(temp.length() - 1);
+            } else if (c >= 'A' && c <= 'Z') {
+                helper(list, temp.append(Character.toLowerCase(c)), s, index+1);
+                temp.deleteCharAt(temp.length() - 1);
             }
         }
     }

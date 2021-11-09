@@ -27,32 +27,26 @@ public class RottingOranges_994 {
 
         while (!queue.isEmpty()) {
             time++;
-            
-            int[] curr = queue.remove();
-            int[] r = new int[] {0,0,-1,1};
-            int[] c = new int[] {-1,1,0,0};
 
-            for (int k = 0; k < 4; k++) {
-                int neighr = curr[0] + r[k];
-                int neighc = curr[1] + c[k];
-                if (neighr < 0 || neighr >= m || neighc < 0 || neighc >= n)
-                    continue;
-                if (grid[neighr][neighc] == 1) {
-                    grid[neighr][neighc] = 2;
-                    queue.add(new int[] {neighr, neighc});
-                    fresh--;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] curr = queue.remove();
+                int[] r = new int[] {0,0,-1,1};
+                int[] c = new int[] {-1,1,0,0};
+
+                for (int k = 0; k < 4; k++) {
+                    int neighr = curr[0] + r[k];
+                    int neighc = curr[1] + c[k];
+                    if (neighr < 0 || neighr >= m || neighc < 0 || neighc >= n)
+                        continue;
+                    if (grid[neighr][neighc] == 1) {
+                        grid[neighr][neighc] = 2;
+                        queue.add(new int[] {neighr, neighc});
+                        fresh--;
+                    }
                 }
             }
-            // time = flag ? time + queue.size() : time;
         }
-
-        /*for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    return -1;
-                }
-            }
-        }*/
 
         return fresh == 0 ? time - 1 : -1;
     }

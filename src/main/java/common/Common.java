@@ -51,4 +51,12 @@ public class Common {
                 " | Result: " + (output == expected ? "TRUE" : "^^FALSE^^"));
         System.out.println();
     }
+
+    public static void printResult(int input, int output, int expected) {
+        System.out.println("Input: " + input +
+                " | Output: " + output +
+                " | Expected: " + expected +
+                " | Result: " + (output == expected ? "TRUE" : "^^FALSE^^"));
+        System.out.println();
+    }
 }

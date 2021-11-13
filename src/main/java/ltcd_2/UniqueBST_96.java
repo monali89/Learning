@@ -18,13 +18,14 @@ public class UniqueBST_96 {
 
     private int helper(int s, int e, int idx) {
 
+
+
         if (idx < s || idx > e) return 0;
         if (s == e) return 1;
-        //if (e - s == 1) return 2;
-        int total = 0;
+        int total = 1;
 
         for (int i = s; i <= e; i++) {
-            if (i == idx) continue;
+            //if (i == idx) continue;
             int leftSide = helper(s, i-1, i);
             int rightSide = helper(i+1, e, i);
             total = total + leftSide + rightSide + 1;

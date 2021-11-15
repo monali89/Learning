@@ -1,42 +1,62 @@
 package ltcd;
 
-/**
- * Date: 6/10/2019
- * @author: Monali
- */
+import common.Common;
 
 public class EditDistance {
 
+    int[][] dp;
 
+    public int minDistance(String word1, String word2) {
+
+        dp = new int[word1.length()][word2.length()];
+
+        for (int i = 0; i < word1.length(); i++) {
+            for (int j = 0; j < word2.length(); j++) {
+                dp[i][j] = -1;
+            }
+        }
+
+        return match(word1, word2, 0, 0);
+    }
+
+    public int match(String s1, String s2, int i, int j){
+        if(i == s1.length()) return s2.length() - j;
+        if(j == s2.length()) return s1.length() - i;
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        if(s1.charAt(i) == s2.charAt(j)){
+            dp[i][j] = match(s1, s2, i+1, j+1);
+        }else{
+            int insert = match(s1, s2, i+1, j);
+            int delete = match(s1, s2, i, j+1);
+            int replace = match(s1, s2, i+1, j+1);
+            dp[i][j] = Math.min(replace, Math.min(insert, delete)) + 1;
+        }
+        return dp[i][j];
+    }
+
+    public static void main(String[] args) {
+
+        EditDistance object = new EditDistance();
+        String word1;
+        String word2;
+        int output;
+        int expected;
+
+        word1 = "horse";
+        word2 = "ros";
+        output = object.minDistance(word1, word2);
+        expected = 3;
+        Common.printResult("Word1: " + word1 + ", Word2: " + word2, output, expected);
+
+        word1 = "dinitrophenylhydrazine";
+        word2 = "acetylphenylhydrazine";
+        output = object.minDistance(word1, word2);
+        expected = 3;
+        Common.printResult("Word1: " + word1 + ", Word2: " + word2, output, expected);
+    }
 }
 
-/*
-* 72. Edit Distance
-*
-* Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
 
-You have the following 3 operations permitted on a word:
-
-Insert a character
-Delete a character
-Replace a character
-Example 1:
-
-Input: word1 = "horse", word2 = "ros"
-Output: 3
-Explanation:
-horse -> rorse (replace 'h' with 'r')
-rorse -> rose (remove 'r')
-rose -> ros (remove 'e')
-Example 2:
-
-Input: word1 = "intention", word2 = "execution"
-Output: 5
-Explanation:
-intention -> inention (remove 't')
-inention -> enention (replace 'i' with 'e')
-enention -> exention (replace 'n' with 'x')
-exention -> exection (replace 'n' with 'c')
-exection -> execution (insert 'u')
-*
-* */
+// 72. Edit Distance

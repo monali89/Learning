@@ -2,25 +2,38 @@ package ltcd_2;
 
 import common.Common;
 
+import java.util.Arrays;
+
 public class CoinChange {
 
     // 518. Coin Change 2
 
-    private int combinations;
+    private int[] dp;
 
     public int change(int amount, int[] coins) {
-        helper_2(coins, amount);
-        return combinations;
+        dp = new int[amount+1];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        change_helper(coins, amount);
+        System.out.println(Common.arrayToString(dp));
+        return dp[amount];
     }
 
-    private void helper_2(int[] coins, int remaining) {
-        if (remaining == 0) combinations++;
-        else if (remaining < 0) return;
-        else {
-            for (int i = 0; i < coins.length; i++) {
-                helper_2(coins, remaining - coins[i]);
+    private int change_helper(int[] coins, int remaining) {
+        if (remaining == 0) {
+            return 1;
+        }
+        if (dp[remaining] != -1) {
+            return dp[remaining];
+        }
+        int total = 0;
+        for (int i = 0; i < coins.length; i++) {
+            if (remaining >= coins[i]) {
+                total = total + change_helper(coins, remaining - coins[i]);
             }
         }
+        dp[remaining] = total;
+        return dp[remaining];
     }
 
 
@@ -105,13 +118,13 @@ public class CoinChange {
         expected = 20;
         Common.printResult(Common.arrayToString(coins) + " | " + amount, output, expected);*/
 
-        /*coins = new int[] {1,2,5};
+        coins = new int[] {1,2,5};
         amount = 5;
         output = object.change(5, coins);
         expected = 4;
-        Common.printResult(Common.arrayToString(coins) + " | " + amount, output, expected);*/
+        Common.printResult(Common.arrayToString(coins) + " | " + amount, output, expected);
 
         // test coin change recursive
-        System.out.println(object.coinChange_Recursive(new int[] {1,2,5}, 7));
+        // System.out.println(object.coinChange_Recursive(new int[] {1,2,5}, 7));
     }
 }

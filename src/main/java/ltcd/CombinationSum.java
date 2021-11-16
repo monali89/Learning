@@ -13,7 +13,7 @@ public class CombinationSum {
         CombinationSum object = new CombinationSum();
 
         // System.out.println(object.combinationSum(new int[]{2,3,5}, 8));
-        System.out.println(object.combinationSum4(new int[] {1,2,3}, 4));
+        System.out.println(object.combinationSum4(new int[] {1,2,5}, 5));
 
     }
 
@@ -21,30 +21,33 @@ public class CombinationSum {
     // integers nums and a target integer target, return the
     // number of possible combinations that add up to target.
 
-    private int noOfComb;
     private int[] dp;
 
     public int combinationSum4(int[] nums, int target) {
-        noOfComb = 0;
         dp = new int[target+1];
         Arrays.fill(dp, -1);
+        dp[0] = 0;
+        dp[1] = 1;
         combinationSum4_helper(nums, target);
         System.out.println(Common.arrayToString(dp));
-        return noOfComb;
+        return dp[target];
     }
 
-    private void combinationSum4_helper(int[] nums, int rem) {
-
-        if (rem == 0) noOfComb++;
-        if (rem < 0) return;
-        if (dp[rem] != 1) return;
-
-        for (int i = 0; i < nums.length; i++) {
-            combinationSum4_helper(nums, rem - nums[i]);
+    private int combinationSum4_helper(int[] nums, int target) {
+        if (target == 0) {
+            return 1;
         }
-
-        System.out.println("rem:" + rem + ", combos: " + noOfComb);
-        dp[rem] = noOfComb;
+        if (dp[target] != -1) {
+            return dp[target];
+        }
+        int total = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (target >= nums[i]) {
+                total = total + combinationSum4_helper(nums, target - nums[i]);
+            }
+        }
+        dp[target] = total;
+        return total;
     }
 
 

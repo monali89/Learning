@@ -8,34 +8,19 @@ public class CoinChange {
 
     // 518. Coin Change 2
 
-    private int[] dp;
-
     public int change(int amount, int[] coins) {
-        dp = new int[amount+1];
-        Arrays.fill(dp, -1);
-        dp[0] = 0;
-        change_helper(coins, amount);
-        System.out.println(Common.arrayToString(dp));
-        return dp[amount];
+        return change(amount, 0, coins);
     }
+    private int change(int remaining, int index, int[] coins) {
 
-    private int change_helper(int[] coins, int remaining) {
-        if (remaining == 0) {
-            return 1;
-        }
-        if (dp[remaining] != -1) {
-            return dp[remaining];
-        }
-        int total = 0;
-        for (int i = 0; i < coins.length; i++) {
-            if (remaining >= coins[i]) {
-                total = total + change_helper(coins, remaining - coins[i]);
-            }
-        }
-        dp[remaining] = total;
-        return dp[remaining];
+        if(remaining == 0) return 1;
+        if(remaining < 0 || index == coins.length) return 0;
+
+        int sum1 = change(remaining - coins[index], index, coins);
+        int sum2 = change(remaining, index + 1, coins);
+
+        return sum1 + sum2;
     }
-
 
     // 322. Coin Change
     public int coinChange(int[] coins, int amount) {

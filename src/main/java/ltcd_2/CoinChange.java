@@ -8,18 +8,26 @@ public class CoinChange {
 
     // 518. Coin Change 2
 
+    private int[][] dp;
+
     public int change(int amount, int[] coins) {
+
+        dp = new int[coins.length][amount+1];
+
         return change(amount, 0, coins);
     }
     private int change(int remaining, int index, int[] coins) {
 
-        if(remaining == 0) return 1;
-        if(remaining < 0 || index == coins.length) return 0;
+        if (remaining == 0) return 1;
+        if (remaining < 0 || index == coins.length) return 0;
+        if (dp[index][remaining] != 0) return dp[index][remaining];
 
         int sum1 = change(remaining - coins[index], index, coins);
         int sum2 = change(remaining, index + 1, coins);
 
-        return sum1 + sum2;
+        dp[index][remaining] = sum1 + sum2;
+
+        return dp[index][remaining];
     }
 
     // 322. Coin Change

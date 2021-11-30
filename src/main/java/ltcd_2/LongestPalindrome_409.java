@@ -9,6 +9,36 @@ public class LongestPalindrome_409 {
 
     public int longestPalindrome(String s) {
 
+        int[] arr = new int[52];
+        int odd = 0;
+        int even = 0;
+        int oddCount = 0;
+
+        for (int i=0; i<s.length(); i++) {
+            char c = s.charAt(i);
+            if (c <= 'z' && c >= 'a') {
+                arr[s.charAt(i) - 'a']++;
+            } else {
+                arr[s.charAt(i) - 'A' + 26]++;
+            }
+        }
+
+        for (int i=0; i<52; i++) {
+
+            if (arr[i] == 0) continue;
+            if (arr[i] % 2 == 0) even = even + arr[i];
+            else {
+                odd = odd + arr[i];
+                oddCount++;
+            }
+
+        }
+
+        return even + (oddCount == 0 ? 0 : odd - oddCount);
+    }
+
+    public int longestPalindrome_bk(String s) {
+
         if (s.length() == 1) return 1;
 
         Set<Character> set = new HashSet<Character>();
